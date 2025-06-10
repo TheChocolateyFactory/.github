@@ -1,0 +1,13 @@
+{
+  "name": "Validate Chocolatey Package Workflow",
+  "description": "Organization workflow to validate Chocolatey nuspec.",
+  "iconName": "octicon feed-forked",
+  "categories": [
+    "PowerShell"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "^Dockerfile",
+    ".*\\.md$"
+  ]
+}

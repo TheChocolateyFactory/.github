@@ -1,0 +1,26 @@
+name: Validate Chocolatey Package
+description: |
+  This workflow validates a Chocolatey package by running Pester tests.
+  It is designed to be called from other workflows.
+on:
+  workflow_call:
+    inputs:
+      package_path:
+        description: "Path to the Chocolatey package to validate"
+        required: true
+        type: string
+
+jobs:
+  work:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout shared repo
+        uses: actions/checkout@v4
+        with:
+          repository: TheChocolateyFactory/.github
+          ref: main
+
+      - name: Run Pester Tests
+        shell: pwsh
+        run: |
+          Invoke-Pester -Path .\tests\
