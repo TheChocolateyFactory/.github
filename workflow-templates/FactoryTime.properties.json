@@ -1,7 +1,7 @@
 {
     "name": "Factory Time Workflow",
     "description": "Organization CI workflow template.",
-    "iconName": "feed-forked",
+    "iconName": "octicon feed-forked",
     "categories": [
         "PowerShell"
     ],
