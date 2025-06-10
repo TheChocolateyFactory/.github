@@ -1,0 +1,13 @@
+{
+    "name": "Factory Time Workflow",
+    "description": "Organization CI workflow template.",
+    "iconName": "feed-forked",
+    "categories": [
+        "PowerShell"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
