@@ -6,8 +6,6 @@
     "PowerShell"
   ],
   "filePatterns": [
-    "package.json$",
-    "^Dockerfile",
-    ".*\\.md$"
+    ".*\\.nuspec$"
   ]
 }
