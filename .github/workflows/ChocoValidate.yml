@@ -1,7 +1,4 @@
 name: Validate Chocolatey Package
-description: |
-  This workflow validates a Chocolatey package by running Pester tests.
-  It is designed to be called from other workflows.
 on:
   workflow_call:
     inputs:
@@ -14,17 +11,21 @@ jobs:
   work:
     runs-on: windows-latest
     steps:
-      - name: Checkout shared repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Checkout .github repo
         uses: actions/checkout@v4
         with:
           repository: TheChocolateyFactory/.github
+          path: ./dot_github/
           ref: main
 
       - name: Test nuspec
         shell: pwsh
         run: |
+          Import-Module -Name 'Pester' -MinimumVersion 5.3.0
           $configuration = [PesterConfiguration]::Default
-          $configuration.Run.Container += New-PesterContainer -Path .\tests\nuspec_required.tests.ps1 -Data {NuspecPath='${{ inputs.package_path }}'}
+          $configuration.Run.Container = New-PesterContainer -Path .\dot_github\tests\nuspec_required.tests.ps1 -Data @{NuspecPath='${{ inputs.nuspec_path }}'}
           Invoke-Pester -Configuration $configuration
 
       - name: Build Chocolatey Package
@@ -43,6 +44,7 @@ jobs:
           if (-not (Test-Path $nupkgPath)) {
             Write-Error "No nupkg found in output directory."
           }
+          Import-Module -Name 'Pester' -MinimumVersion 5.3.0
           $configuration = [PesterConfiguration]::Default
-          $configuration.Run.Container += New-PesterContainer -Path .\tests\package_required.tests.ps1 -Data {PackagePath=$nupkgPath.FullName}
+          $configuration.Run.Container = New-PesterContainer -Path .\dot_github\tests\package_required.tests.ps1 -Data @{PackagePath=$nupkgPath.FullName}
           Invoke-Pester -Configuration $configuration
