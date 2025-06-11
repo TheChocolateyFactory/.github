@@ -15,4 +15,4 @@ jobs:
       # Run the shared workflow
       - uses: TheChocolateyFactory/.github/shared-workflow/ChocoValidate.yml@maino
         with:
-          nuspec_path: ./path/to/your/package.nupkg
+          nuspec_path: ./path/to/your/package.nuspec
