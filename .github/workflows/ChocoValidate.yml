@@ -24,8 +24,9 @@ jobs:
         shell: pwsh
         run: |
           Import-Module -Name 'Pester' -MinimumVersion 5.3.0
+          $nuspec = Resolve-Path ${{ inputs.nuspec_path }}
           $configuration = [PesterConfiguration]::Default
-          $configuration.Run.Container = New-PesterContainer -Path .\dot_github\tests\nuspec_required.tests.ps1 -Data @{NuspecPath='${{ inputs.nuspec_path }}'}
+          $configuration.Run.Container = New-PesterContainer -Path .\dot_github\tests\nuspec_required.tests.ps1 -Data @{NuspecPath=$nuspec.Path}
           Invoke-Pester -Configuration $configuration
 
       - name: Build Chocolatey Package
