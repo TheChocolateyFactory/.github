@@ -6,6 +6,6 @@
     "PowerShell"
   ],
   "filePatterns": [
-    ".*\\.nuspec$"
+    ".*.nuspec$"
   ]
 }
