@@ -25,6 +25,7 @@ jobs:
         run: |
           Import-Module -Name 'Pester' -MinimumVersion 5.3.0
           $nuspec = Resolve-Path ${{ inputs.nuspec_path }}
+          Write-Host $nuspec.Path
           $configuration = [PesterConfiguration]::Default
           $configuration.Run.Container = New-PesterContainer -Path .\dot_github\tests\nuspec_required.tests.ps1 -Data @{NuspecPath=$nuspec.Path}
           Invoke-Pester -Configuration $configuration
