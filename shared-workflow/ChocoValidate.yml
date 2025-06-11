@@ -5,8 +5,8 @@ description: |
 on:
   workflow_call:
     inputs:
-      package_path:
-        description: "Path to the Chocolatey package to validate"
+      nuspec_path:
+        description: "Path to the Chocolatey nuspec to build and validate"
         required: true
         type: string
 
@@ -20,7 +20,29 @@ jobs:
           repository: TheChocolateyFactory/.github
           ref: main
 
-      - name: Run Pester Tests
+      - name: Test nuspec
         shell: pwsh
         run: |
-          Invoke-Pester -Path .\tests\
+          $configuration = [PesterConfiguration]::Default
+          $configuration.Run.Container += New-PesterContainer -Path .\tests\nuspec_required.tests.ps1 -Data {NuspecPath='${{ inputs.package_path }}'}
+          Invoke-Pester -Configuration $configuration
+
+      - name: Build Chocolatey Package
+        shell: pwsh
+        run: |
+          $packagePath = '${{ inputs.package_path }}'
+          if (-not (Test-Path $packagePath)) {
+            Write-Error "Package path '$packagePath' does not exist."
+          }
+          choco pack $packagePath --outputdirectory ./output
+
+      - name: Validate Chocolatey Package
+        shell: pwsh
+        run: |
+          $nupkgPath = Get-ChildItem './output/*.nupkg'
+          if (-not (Test-Path $nupkgPath)) {
+            Write-Error "No nupkg found in output directory."
+          }
+          $configuration = [PesterConfiguration]::Default
+          $configuration.Run.Container += New-PesterContainer -Path .\tests\package_required.tests.ps1 -Data {PackagePath=$nupkgPath.FullName}
+          Invoke-Pester -Configuration $configuration
