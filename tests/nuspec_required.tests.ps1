@@ -5,7 +5,7 @@ param(
     [String]
     $NuspecPath
 )
-BeforeDiscovery {
+BeforeAll {
     [xml]$xml = Get-Content $NuspecPath
     if ($xml.package -eq $null) {
         throw "The nuspec file at $NuspecPath does not contain a <package> element."
