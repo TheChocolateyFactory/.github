@@ -7,12 +7,8 @@ on:
     branches: [$default-branch]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout your repository
-      - uses: actions/checkout@v4
-      # Run the shared workflow
-      - uses: TheChocolateyFactory/.github/shared-workflow/ChocoValidate.yml@main
-        with:
-          nuspec_path: ./path/to/your/package.nuspec
+  # Run the shared workflow
+  shared:
+    uses: TheChocolateyFactory/.github/.github/workflows/ChocoValidate.yml@main
+    with:
+      nuspec_path: ./path/to/your/package.nuspec
